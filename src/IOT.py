@@ -1,12 +1,13 @@
 import requests
 import json
 
-class Api(object):
+class Person(object):
 
-    def __init__(self, username, password, host="http://172.16.100.243/api/v1/"):
+    def __init__(self, username, password, host="http://172.16.100.243//api/v1/"):
         self.host = host
         self.username = username
         self.password = password
+        self.projects=[]
 
     def _api_request(self, endpoint, verb='get', body=None, headers=None, data=None):
         response = getattr(requests, verb)(self.host + endpoint, json=body, headers=headers, data= data)
@@ -31,8 +32,8 @@ class Api(object):
         self.headers={"Authorization":"Bearer " + self.access_token}
         return self.access_token
 
-    def get_projects(self, endpoint="project/my"):
-        self.projects=self._api_request(endpoint, headers=self.headers)
+    def get_projects(self, endpoint="project/projects"):
+        self.projects.extend(self._api_request(endpoint, headers=self.headers))
         return self.projects
 
     def get_things(self, project_id, endpoint="project/get/project/{0}/things"):
@@ -45,18 +46,32 @@ class Api(object):
         self.sensors=self._api_request(endpoint, headers=self.headers)
         return self.sensors
 
+    def project(self, project_inedx):
+        return self.projects[project_inedx]
+
+    def thing(self, thing_index):
+        print(self["id"])
+
+class Project():
+    def __init__(self):
+        self.things=[]
+
+class Thing():
+    def __init__(self):
+        self.sensors=[]
+
 if __name__=="__main__":
 
-    ali=Api("ali@parto.com", "1qaz@WSX", )
+    ali=Person("ali@parto.com", "1qaz@WSX", )
 
     ali.login()
     print(ali.access_token)
 
     ali.get_projects()
-    print(ali.projects)
 
-    ali.get_things(ali.projects[0]["id"])
-    print(ali.things)
 
-    ali.get_sensors(ali.things[1]["id"])
-    print(ali.sensors)
+    # ali.get_things(ali.projects[0]["id"])
+    # print("things\n", ali.things)
+    #
+    # ali.get_sensors(ali.things[1]["id"])
+    # print("sensors\n", ali.sensors)
