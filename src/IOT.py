@@ -28,21 +28,22 @@ class Api(object):
     def login(self, endpoint="user/login", verb="post"):
         data={"username": self.username, "password": self.password}
         self.access_token=self._api_request(endpoint, verb, data=data)["accessToken"]
+        self.headers={"Authorization":"Bearer " + self.access_token}
         return self.access_token
 
     def get_projects(self, endpoint="project/my"):
-        headers={"Authorization":"Bearer " + self.access_token}
-        self.projects=self._api_request(endpoint, headers=headers)
+        self.projects=self._api_request(endpoint, headers=self.headers)
         return self.projects
 
     def get_things(self, project_id, endpoint="project/get/project/{0}/things"):
         endpoint=endpoint.format(project_id)
-        headers={"Authorization":"Bearer " + self.access_token}
-        self.things= self._api_request(endpoint, headers=headers)
+        self.things= self._api_request(endpoint, headers=self.headers)
         return self.things
 
-
-
+    def get_sensors(self, thing_id, endpoint="project/get/thing/{0}/sensors"):
+        endpoint=endpoint.format(thing_id)
+        self.sensors=self._api_request(endpoint, headers=self.headers)
+        return self.sensors
 
 if __name__=="__main__":
 
@@ -56,3 +57,6 @@ if __name__=="__main__":
 
     ali.get_things(ali.projects[0]["id"])
     print(ali.things)
+
+    ali.get_sensors(ali.things[1]["id"])
+    print(ali.sensors)
