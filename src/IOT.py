@@ -67,6 +67,17 @@ class Project():
         self.permission= api._api_request(endpoint, headers=api.headers)
         return self.permission
 
+    def delete_project(self, api, endpoint="project/{0}"):
+        endpoint=endpoint.format(self.project_obj["id"])
+        self.delete_state=api._api_request(endpoint, headers=api.headers, verb="delete")
+        return self.delete_state
+
+    def update_project(self, api, new_name, new_description, endpoint="project/{0}"):
+        endpoint=endpoint.format(self.project_obj["id"])
+        data={"name": new_name, "description":new_description}
+        self.update_state=api._api_request(endpoint, headers=api.headers, verb="put", data=data)
+        return self.update_state
+
 class Thing():
     def __init__(self, thing_obj):
         self.thing_obj=thing_obj
@@ -104,6 +115,12 @@ if __name__=="__main__":
     ali.projects[0].get_permission(connection)
     print(ali.projects[0].permission)
 
+    ali.projects[0].delete_project(connection)
+    print(ali.projects[0].delete_state)
+
+    ali.projects[0].update_project(connection, "new name", "new description")
+    print(ali.projects[0].update_state)
+
     ali.projects[0].get_things(connection)
     print(ali.projects[0].things)
     print(ali.projects[0].things[0])
@@ -113,4 +130,4 @@ if __name__=="__main__":
 
     ali.projects[0].things[0].get_sensors(connection)
     print(ali.projects[0].things[0].sensors)
-    print(ali.projects[0].things[0].sensors[0].sensor_obj)
+    #print(ali.projects[0].things[0].sensors[0].sensor_obj)
