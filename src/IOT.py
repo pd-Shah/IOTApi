@@ -3,10 +3,10 @@ import json
 
 class Api():
 
-    def __new__(cls, *args):
-        if not hasattr(cls, "_instance"):
-            cls._instance=object.__new__(cls)
-        return cls._instance
+    # def __new__(cls, *args):
+    #     if not hasattr(cls, "_instance"):
+    #         cls._instance=object.__new__(cls)
+    #     return cls._instance
 
     def __init__(self,  username=None, password=None, host="http://172.16.100.243/api/v1/"):
         self.username = username
@@ -43,8 +43,9 @@ class Person(object):
         self.projects=[]
         self.api=Api(username, password)
 
-    def get_projects(self, endpoint="project/list"):
-        self.projects.extend([Project(proj) for proj in self.api._api_request(endpoint, headers=self.api.headers)])
+    def get_projects(self, page_number, page_size, endpoint="project/list"):
+        data={"pageNumber":page_number, "pageSize":page_size}
+        self.projects.extend([Project(proj) for proj in self.api._api_request(endpoint, headers=self.api.headers, data=data)])
         return self.projects
 
     def make_new_project(self, project_name, project_description, endpoint="project/new", verb="post"):
@@ -56,8 +57,9 @@ class Permission():
     def __init__(self, connection):
         self.headers=connection.headers
 
-    def get_permission_list(self, endpoint="permission/list"):
-        self.permission_list=api._api_request(endpoint, headers=self.headers)
+    def get_permission_list(self, page_number, page_size, endpoint="permission/list"):
+        data={"pageNumber": page_number, "pageSize":page_size}
+        self.permission_list=api._api_request(endpoint, headers=self.headers, data=data)
         return self.permission_list
 
     def grant_permission(self, project_id, user_id, permission_id, endpoint="permission/grant", verb="post"):
@@ -93,9 +95,10 @@ class Project():
         self.project_info_update_state=api._api_request(endpoint, headers=api.headers, verb=verb, data=data)
         return self.project_info_update_state
 
-    def get_things(self, api, endpoint="project/{0}/things"):
+    def get_things(self, page_number, page_size, api, endpoint="project/{0}/things"):
         endpoint=endpoint.format(self.project_obj["id"])
-        self.things.extend([Thing(thing) for thing in  api._api_request(endpoint, headers=api.headers)])
+        data={"pageNumber":page_number, "pageSize":page_size, projectId:(self.project_obj["id"]}
+        self.things.extend([Thing(thing) for thing in  api._api_request(endpoint, headers=api.headers, data=data)])
         return self.things
 
     def delete_project(self, api, endpoint="project/{0}", verb="delete"):
@@ -118,17 +121,22 @@ class Project():
     #     endpoint=endpoint.format(self.project_obj["id"])
     #     self.delete_permission_state=api._api_request(endpoint, headers=api.headers, verb=verb)
     #     return self.delete_permission_state
-    #
+
     # def update_permission(self, api, endpoint="project/{0}/permission", verb="put"):
     #     endpoint=endpoint.format(self.project_obj["id"])
     #     self.update_permission_state=api._api_request(endpoint, headers=api.headers, verb=verb)
     #     return self.delete_permission_state
 
-    def get_project_users():
-        pass
+    def get_project_users(self, page_number, page_size, api, endpoint="project/{0}/users"):
+        endpoint=endpoint.format(self.project_obj["id"])
+        data={"projectId": self.project_obj["id"], "pageNumber":page_number, "pageSize":page_size}
+        self.project_users_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.project_users_state
 
-    def make_new_thig():
-        pass
+    def make_new_thig(self, thing_name, description, api, endpoint="thing/new", verb="post"):
+        data={"projectId": self.project_obj["id"], "name":thing_name, "description":description}
+        self.things.append(Thing(api._api_request(endpoint, headers=api.headers, data=data)))
+        return self.things[-1]
 
 class Thing(Interface):
 
@@ -136,9 +144,10 @@ class Thing(Interface):
         self.thing_obj=thing_obj
         self.sensors=[]
 
-    def get_sensors(self, api, endpoint="thing/{0}/sensors"):
+    def get_sensors(self, page_number, page_size, api, endpoint="thing/{0}/sensors"):
         endpoint=endpoint.format(self.thing_obj["id"])
-        self.sensors.extend([Sensor(sensor) for sensor in api._api_request(endpoint, headers=api.headers)])
+        data={"thingId":self.thing_obj["id"], "pageNumber":page_number, "pageSize":page_size }
+        self.sensors.extend([Sensor(sensor) for sensor in api._api_request(endpoint, headers=api.headers, data=data)])
         return self.sensors
 
     def delete_thing(self, api, endpoint="thing/{0}", verb="delete"):
@@ -146,17 +155,35 @@ class Thing(Interface):
         self.delete_thing_sate= api._api_request(endpoint, headers=api.headers, verb=verb)
         return delete_thing_state
 
-    def get_raw_data():
-        pass
+    def get_raw_data(self, page_number, page_size, api, endpoint="thing/{0}/data/raw"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"pageNumber": page_number,"thingId":endpoint.format(self.thing_obj["id"]), "pageSize": page_size}
+        self.raw_data=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.raw_data
 
-    def get_location():
-        pass
+    def get_thing_interfaces(self, api, endpoint="thing/{0}/interfaces"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"thingId":endpoint.format(self.thing_obj["id"])}
+        self.thing_interfaces=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.thing_interfaces
 
-    def update_location():
-        pass
+    def get_location(self, api, endpoint="thing/{0}/location"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"thingId":endpoint.format(self.thing_obj["id"])}
+        self.location=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.location
 
-    def get_interfaces():
-        pass
+    def update_location(self, latitude, longitude, api, endpoint="thing/{0}/data/raw", verb="put"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"latitude": latitude,"thingId":endpoint.format(self.thing_obj["id"]), "longitude": longitude}
+        self.update_location_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        return self.update_location_state
+
+    def get_data_sensor_by_type(self, _type, page_number, page_size, endpoint="thing/{0}/data/sensor/{1}"):
+        endpoint=endpoint.format(self.thing_obj["id"], _type)
+        data={"thingId": self.thing_obj["id"] ,"type":_type, "pageNumber":page_number, "pageSize":page_size}
+        self.data_sensor_by_type_state= api._api_request(endpoint, headers=api.headers, data=data)
+        return self.data_sensor_by_type_state
 
 class Sensor():
 
@@ -273,7 +300,7 @@ class Interface():
 
 if __name__=="__main__":
 
-    pd=Person("pd@pd.com", "1qaz@WSX")
+    pd=Person("pedram@pedram.com", "1qaz@WSX")
     connection=pd.api
     print(pd.api.headers)
     print(pd.api.access_token)
