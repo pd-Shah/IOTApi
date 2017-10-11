@@ -97,7 +97,7 @@ class Project():
 
     def get_things(self, page_number, page_size, api, endpoint="project/{0}/things"):
         endpoint=endpoint.format(self.project_obj["id"])
-        data={"pageNumber":page_number, "pageSize":page_size, projectId:(self.project_obj["id"]}
+        data={"pageNumber":page_number, "pageSize":page_size, projectId: self.project_obj["id"]}
         self.things.extend([Thing(thing) for thing in  api._api_request(endpoint, headers=api.headers, data=data)])
         return self.things
 
@@ -138,58 +138,6 @@ class Project():
         self.things.append(Thing(api._api_request(endpoint, headers=api.headers, data=data)))
         return self.things[-1]
 
-class Thing(Interface):
-
-    def __init__(self, thing_obj):
-        self.thing_obj=thing_obj
-        self.sensors=[]
-
-    def get_sensors(self, page_number, page_size, api, endpoint="thing/{0}/sensors"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"thingId":self.thing_obj["id"], "pageNumber":page_number, "pageSize":page_size }
-        self.sensors.extend([Sensor(sensor) for sensor in api._api_request(endpoint, headers=api.headers, data=data)])
-        return self.sensors
-
-    def delete_thing(self, api, endpoint="thing/{0}", verb="delete"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        self.delete_thing_sate= api._api_request(endpoint, headers=api.headers, verb=verb)
-        return delete_thing_state
-
-    def get_raw_data(self, page_number, page_size, api, endpoint="thing/{0}/data/raw"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"pageNumber": page_number,"thingId":endpoint.format(self.thing_obj["id"]), "pageSize": page_size}
-        self.raw_data=api._api_request(endpoint, headers=api.headers, data=data)
-        return self.raw_data
-
-    def get_thing_interfaces(self, api, endpoint="thing/{0}/interfaces"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"thingId":endpoint.format(self.thing_obj["id"])}
-        self.thing_interfaces=api._api_request(endpoint, headers=api.headers, data=data)
-        return self.thing_interfaces
-
-    def get_location(self, api, endpoint="thing/{0}/location"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"thingId":endpoint.format(self.thing_obj["id"])}
-        self.location=api._api_request(endpoint, headers=api.headers, data=data)
-        return self.location
-
-    def update_location(self, latitude, longitude, api, endpoint="thing/{0}/data/raw", verb="put"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"latitude": latitude,"thingId":endpoint.format(self.thing_obj["id"]), "longitude": longitude}
-        self.update_location_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
-        return self.update_location_state
-
-    def get_data_sensor_by_type(self, _type, page_number, page_size, endpoint="thing/{0}/data/sensor/{1}"):
-        endpoint=endpoint.format(self.thing_obj["id"], _type)
-        data={"thingId": self.thing_obj["id"] ,"type":_type, "pageNumber":page_number, "pageSize":page_size}
-        self.data_sensor_by_type_state= api._api_request(endpoint, headers=api.headers, data=data)
-        return self.data_sensor_by_type_state
-
-class Sensor():
-
-    def __init__(self, sensor_obj):
-        self.sensor_obj=sensor_obj
-
 class Interface():
 
     def get_lora(self, api, endpoint="interface/{0}/lora/enable"):
@@ -200,7 +148,7 @@ class Interface():
     def update_lora(self, enable, api, endpoint="interface/{0}/lora/enable", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={"enable":enable}
-        self.update_lora_state=api._api_request(endpoint, headers=api.headers. data= data, verb=verb)
+        self.update_lora_state=api._api_request(endpoint, headers=api.headers, data= data, verb=verb)
         return self.update_lora_state
 
     def get_lora_otaa(self, api, endpoint="interface/{0}/lora/otaa"):
@@ -298,6 +246,58 @@ class Interface():
         self.get_jwt_generate_state=api._api_request(endpoint, headers=api.headers, data=data)
         return self.get_jwt_generate_state
 
+class Thing(Interface):
+
+    def __init__(self, thing_obj):
+        self.thing_obj=thing_obj
+        self.sensors=[]
+
+    def get_sensors(self, page_number, page_size, api, endpoint="thing/{0}/sensors"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"thingId":self.thing_obj["id"], "pageNumber":page_number, "pageSize":page_size }
+        self.sensors.extend([Sensor(sensor) for sensor in api._api_request(endpoint, headers=api.headers, data=data)])
+        return self.sensors
+
+    def delete_thing(self, api, endpoint="thing/{0}", verb="delete"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        self.delete_thing_sate= api._api_request(endpoint, headers=api.headers, verb=verb)
+        return delete_thing_state
+
+    def get_raw_data(self, page_number, page_size, api, endpoint="thing/{0}/data/raw"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"pageNumber": page_number,"thingId":endpoint.format(self.thing_obj["id"]), "pageSize": page_size}
+        self.raw_data=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.raw_data
+
+    def get_thing_interfaces(self, api, endpoint="thing/{0}/interfaces"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"thingId":endpoint.format(self.thing_obj["id"])}
+        self.thing_interfaces=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.thing_interfaces
+
+    def get_location(self, api, endpoint="thing/{0}/location"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"thingId":endpoint.format(self.thing_obj["id"])}
+        self.location=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.location
+
+    def update_location(self, latitude, longitude, api, endpoint="thing/{0}/data/raw", verb="put"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"latitude": latitude,"thingId":endpoint.format(self.thing_obj["id"]), "longitude": longitude}
+        self.update_location_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        return self.update_location_state
+
+    def get_data_sensor_by_type(self, _type, page_number, page_size, endpoint="thing/{0}/data/sensor/{1}"):
+        endpoint=endpoint.format(self.thing_obj["id"], _type)
+        data={"thingId": self.thing_obj["id"] ,"type":_type, "pageNumber":page_number, "pageSize":page_size}
+        self.data_sensor_by_type_state= api._api_request(endpoint, headers=api.headers, data=data)
+        return self.data_sensor_by_type_state
+
+class Sensor():
+
+    def __init__(self, sensor_obj):
+        self.sensor_obj=sensor_obj
+
 if __name__=="__main__":
 
     pd=Person("pedram@pedram.com", "1qaz@WSX")
@@ -307,7 +307,7 @@ if __name__=="__main__":
     print(pd.api.host)
 
     pd.make_new_project("new", "new")
-    pd.get_projects()
+    pd.get_projects( page_size=0, page_number=0)
     print(pd.projects)
     print(pd.projects[0])
 
@@ -326,25 +326,25 @@ if __name__=="__main__":
     pd.projects[0].get_permission(connection)
     print(pd.projects[0].permission)
 
-    pd.projects[0].delete_permission(connection)
-    print(pd.projects[0].delete_permission_state)
-
-    pd.projects[0].update_permission(connection)
-    print(pd.projects[0].update_permission_state)
-
-    pd.projects[0].delete_project(connection)
-    print(pd.projects[0].delete_state)
-
-    pd.projects[0].get_things(connection)
-    print(pd.projects[0].things)
-    print(pd.projects[0].things[0])
-    print(pd.projects[0].things[0].thing_obj)
-    print(pd.projects[0].things[0].thing_obj["id"])
-    print(pd.projects[0].things[0].sensors)
-
-    pd.projects[0].things[0].delete_thing(connection)
-    print(pd.projects[0].things[0].delete_thing_state)
-
-    pd.projects[0].things[0].get_sensors(connection)
-    print(pd.projects[0].things[0].sensors)
-    print(pd.projects[0].things[0].sensors[0].sensor_obj)
+    # pd.projects[0].delete_permission(connection)
+    # print(pd.projects[0].delete_permission_state)
+    #
+    # pd.projects[0].update_permission(connection)
+    # print(pd.projects[0].update_permission_state)
+    #
+    # pd.projects[0].delete_project(connection)
+    # print(pd.projects[0].delete_state)
+    #
+    # pd.projects[0].get_things(connection)
+    # print(pd.projects[0].things)
+    # print(pd.projects[0].things[0])
+    # print(pd.projects[0].things[0].thing_obj)
+    # print(pd.projects[0].things[0].thing_obj["id"])
+    # print(pd.projects[0].things[0].sensors)
+    #
+    # pd.projects[0].things[0].delete_thing(connection)
+    # print(pd.projects[0].things[0].delete_thing_state)
+    #
+    # pd.projects[0].things[0].get_sensors(connection)
+    # print(pd.projects[0].things[0].sensors)
+    # print(pd.projects[0].things[0].sensors[0].sensor_obj)
