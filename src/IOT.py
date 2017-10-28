@@ -37,6 +37,15 @@ class Api():
         self.headers={"Authorization":"Bearer " + self.access_token}
         return self.access_token, self.headers
 
+    def signup(self, endpoint="user/signup", verb="post"):
+        data={"username": self.username, "password": self.password}
+        self.signup_state=self._api_request(endpoint, verb, data=data)
+        return self.signup_state
+
+    def renew(self, endpoint="user/renew"):
+        self.renew_state=self._api_request(endpoint, headers=self.headers)
+        return self.renew_state
+
 class Person(object):
 
     def __init__(self, username, password):
@@ -60,7 +69,7 @@ class Permission():
     def get_permission_list(self, page_number, page_size, endpoint="permission/list"):
         data={"pageNumber": page_number, "pageSize":page_size}
         self.permission_list=api._api_request(endpoint, headers=self.headers, data=data)
-        return self.permission_list
+        return self.permission_list_state
 
     def grant_permission(self, project_id, user_id, permission_id, endpoint="permission/grant", verb="post"):
         data={"projectId": project_id, "userId":user_id, "permissionId":permission_id}
@@ -78,7 +87,19 @@ class Permission():
         self.get_permission_state=api._api_request(endpoint, data=data, headers=self.headers)
         return self.get_permission_state
 
-class Project():
+class ProjectCaptcha():
+
+    def captcha_generate_deletion(self, api, endpoint="captcha/generate/project/deletion"):
+        data={"projectId":self.project_obj["id"]}
+        self.captcha_generate_deletion_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.captcha_generate_deletion_state
+
+    def captcha_generate_modification(self, api, endpoint="captcha/generate/project/modification"):
+        data={"projectId":self.project_obj["id"]}
+        self.captcha_generate_modification_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.captcha_generate_modification_state
+
+class Project(ProjectCaptcha):
 
     def __init__(self, project_obj):
         self.project_obj=project_obj
@@ -87,7 +108,7 @@ class Project():
     def get_project_info(self, api, endpoint="project/{0}/info"):
         endpoint=endpoint.format(self.project_obj["id"])
         self.info=api._api_request(endpoint, headers=api.headers)
-        return self.info
+        return self.info_state
 
     def update_project_info(self, new_name, new_description, api, endpoint="project/{0}/info", verb="put"):
         endpoint=endpoint.format(self.project_obj["id"])
@@ -115,7 +136,7 @@ class Project():
     def get_permission(self, api, endpoint="project/{0}/permission"):
         endpoint=endpoint.format(self.project_obj["id"])
         self.permission= api._api_request(endpoint, headers=api.headers)
-        return self.permission
+        return self.permission_state
 
     # def delete_permission(self, api, endpoint="project/{0}/permission", verb="delete"):
     #     endpoint=endpoint.format(self.project_obj["id"])
@@ -133,7 +154,7 @@ class Project():
         self.project_users_state=api._api_request(endpoint, headers=api.headers, data=data)
         return self.project_users_state
 
-    def make_new_thig(self, thing_name, description, api, endpoint="thing/new", verb="post"):
+    def make_new_thing(self, thing_name, description, api, endpoint="thing/new", verb="post"):
         data={"projectId": self.project_obj["id"], "name":thing_name, "description":description}
         self.things.append(Thing(api._api_request(endpoint, headers=api.headers, data=data)))
         return self.things[-1]
@@ -143,7 +164,7 @@ class Interface():
     def get_lora(self, api, endpoint="interface/{0}/lora/enable"):
         endpoint=endpoint.format(self.thing_obj["id"])
         self.lora=api._api_request(endpoint, headers=api.headers)
-        return self.lora
+        return self.lora_state
 
     def update_lora(self, enable, api, endpoint="interface/{0}/lora/enable", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
@@ -188,7 +209,7 @@ class Interface():
     def check_mqtt(self, api, endpoint="interface/{0}/mqtt/enable"):
         endpoint=endpoint.format(self.thing_obj["id"])
         self.mqtt=api._api_request(endpoint, headers=api.headers)
-        return self.mqtt
+        return self.mqtt_state
 
     def update_mqtt(self, enable, api, endpoint="interface/{0}/mqtt/enable", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
@@ -221,7 +242,7 @@ class Interface():
     def check_jwt(self, api, endpoint="interface/{0}/jwt/enable"):
         endpoint=endpoint.format(self.thing_obj["id"])
         self.jwt=api._api_request(endpoint, headers=api.headers)
-        return self.jwt
+        return self.jwt_state
 
     def update_jwt(self, enable, api, endpoint="interface/{0}/jwt/enable", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
@@ -246,7 +267,19 @@ class Interface():
         self.get_jwt_generate_state=api._api_request(endpoint, headers=api.headers, data=data)
         return self.get_jwt_generate_state
 
-class Thing(Interface):
+class ThingCaptcha():
+
+    def captcha_generate_modification(self, api, endpoint="captcha/generate/thing/modification"):
+        data={"thingId":self.thing_obj["id"], }
+        self.captcha_generate_modification_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.captcha_generate_modification_state
+
+    def captcha_generate_deletion(self, api, endpoint="captcha/generate/thing/deletion"):
+        data={"thingId":self.thing_obj["id"], }
+        self.captcha_generate_deletion_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.captcha_generate_deletion_state
+
+class Thing(Interface, ThingCaptcha):
 
     def __init__(self, thing_obj):
         self.thing_obj=thing_obj
@@ -256,7 +289,7 @@ class Thing(Interface):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={"thingId":self.thing_obj["id"], "pageNumber":page_number, "pageSize":page_size }
         self.sensors.extend([Sensor(sensor) for sensor in api._api_request(endpoint, headers=api.headers, data=data)])
-        return self.sensors
+        return self.sensors_state
 
     def delete_thing(self, api, endpoint="thing/{0}", verb="delete"):
         endpoint=endpoint.format(self.thing_obj["id"])
@@ -267,19 +300,19 @@ class Thing(Interface):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={"pageNumber": page_number,"thingId":endpoint.format(self.thing_obj["id"]), "pageSize": page_size}
         self.raw_data=api._api_request(endpoint, headers=api.headers, data=data)
-        return self.raw_data
+        return self.raw_data_state
 
     def get_thing_interfaces(self, api, endpoint="thing/{0}/interfaces"):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={"thingId":endpoint.format(self.thing_obj["id"])}
         self.thing_interfaces=api._api_request(endpoint, headers=api.headers, data=data)
-        return self.thing_interfaces
+        return self.thing_interfaces_state
 
     def get_location(self, api, endpoint="thing/{0}/location"):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={"thingId":endpoint.format(self.thing_obj["id"])}
         self.location=api._api_request(endpoint, headers=api.headers, data=data)
-        return self.location
+        return self.location_state
 
     def update_location(self, latitude, longitude, api, endpoint="thing/{0}/data/raw", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
@@ -287,16 +320,65 @@ class Thing(Interface):
         self.update_location_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self.update_location_state
 
-    def get_data_sensor_by_type(self, _type, page_number, page_size, endpoint="thing/{0}/data/sensor/{1}"):
+    def get_data_sensor_by_type(self, _type, page_number, page_size, api, endpoint="thing/{0}/data/sensor/{1}"):
         endpoint=endpoint.format(self.thing_obj["id"], _type)
         data={"thingId": self.thing_obj["id"] ,"type":_type, "pageNumber":page_number, "pageSize":page_size}
         self.data_sensor_by_type_state= api._api_request(endpoint, headers=api.headers, data=data)
         return self.data_sensor_by_type_state
 
+    def get_script(self, api, endpoint="thing/{0}/script"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        self.script_state= api._api_request(endpoint, headers=api.headers)
+        return self.script_state
+
+    def update_scrip(self, script, api, endpoint="thing/{0}/script"):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        data={"thingId":self.thing_obj["id"], "script":script,}
+        self.update_scrip_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return self.update_scrip_state
+
 class Sensor():
 
     def __init__(self, sensor_obj):
         self.sensor_obj=sensor_obj
+
+class Script():
+    def get_script_validation(self, param, code, api, endpoint="script/validate"):
+        data={"param":param, "code":code}
+        self.script_validation_state=api._api_request(endpoint, headers=api.headers, data=data)
+        return script_validation_state
+
+class Data():
+
+    def make_anonymous_raw(self, base64, api, endpoint="data/anonymous/raw", verb="post"):
+        data={"base64":base64}
+        self.anonymous_raw_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        return self.anonymous_raw_state
+
+    def make_raw_noscript(self, base64, api, endpoint="data/raw/noscript", , verb="post"):
+        data={"base64":base64}
+        self.raw_noscript_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        return self.raw_noscript_state
+
+    def make_anonymous_cbor(self, base64, api, endpoint="data/anonymous/cbor", verb="post"):
+        data={"base64":base64}
+        self.anonymous_cbor_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        return self.anonymous_cbor_state
+
+    def make_anonymous_cbor_noscript(self, base64, api, endpoint="data/anonymous/cbor/noscript", verb="post"):
+        data={"base64":base64}
+        self.anonymous_cbor_noscript_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        return self.anonymous_cbor_noscript_state
+
+    def make_anonymous_json(self, json, api, endpoint="data/anonymous/json", verb="post"):
+        data={"json":json}
+        self.anonymous_json_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb )
+        return self.anonymous_json_state
+
+    def make_anonymous_json_noscript(self, json, api, endpoint="data/anonymous/json/noscript", verb="post"):
+        data={"json": json}
+        self.anonymous_json_noscript_state= api._api_request(endpoint, headers= api.headers, data=data, verb=verb)
+        return self.anonymous_json_noscript_state
 
 if __name__=="__main__":
 
