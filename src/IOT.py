@@ -355,7 +355,7 @@ class Data():
         self.anonymous_raw_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self.anonymous_raw_state
 
-    def make_raw_noscript(self, base64, api, endpoint="data/raw/noscript", , verb="post"):
+    def make_raw_noscript(self, base64, api, endpoint="data/raw/noscript", verb="post"):
         data={"base64":base64}
         self.raw_noscript_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self.raw_noscript_state
@@ -382,31 +382,31 @@ class Data():
 
 if __name__=="__main__":
 
-    pd=Person("pedram@pedram.com", "1qaz@WSX")
+    pd=Person("pd", "123456")
     connection=pd.api
     print(pd.api.headers)
     print(pd.api.access_token)
     print(pd.api.host)
 
-    pd.make_new_project("new", "new")
-    pd.get_projects( page_size=0, page_number=0)
-    print(pd.projects)
-    print(pd.projects[0])
-
-    pd.projects[0].update_project_info("new name", "new description", connection)
-    print(pd.projects[0].project_info_update_state)
-
-    pd.projects[0].update_project("new name", "new description", connection)
-    print(pd.projects[0].project_update_state)
-    print(pd.projects[0].things)
-    print(pd.projects[0].project_obj)
-    print(pd.projects[0].project_obj["id"])
-
-    pd.projects[0].get_project_info(connection)
-    print(pd.projects[0].info)
-
-    pd.projects[0].get_permission(connection)
-    print(pd.projects[0].permission)
+    # pd.make_new_project("new", "new")
+    # pd.get_projects(page_size=10, page_number=0)
+    # print(pd.projects)
+    # print(pd.projects[0])
+    #
+    # pd.projects[0].update_project_info("new name", "new description", connection)
+    # print(pd.projects[0].project_info_update_state)
+    #
+    # pd.projects[0].update_project("new name", "new description", connection)
+    # print(pd.projects[0].project_update_state)
+    # print(pd.projects[0].things)
+    # print(pd.projects[0].project_obj)
+    # print(pd.projects[0].project_obj["id"])
+    #
+    # pd.projects[0].get_project_info(connection)
+    # print(pd.projects[0].info)
+    #
+    # pd.projects[0].get_permission(connection)
+    # print(pd.projects[0].permission)
 
     # pd.projects[0].delete_permission(connection)
     # print(pd.projects[0].delete_permission_state)
