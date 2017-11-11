@@ -1,5 +1,3 @@
-import json
-
 from api import Api
 from mqtt import MQTT
 from permission import Permission
@@ -107,7 +105,6 @@ if __name__=="__main__":
     pd.projects[0].things[0].get_jwt_settings(api=connection)
     print(pd.projects[0].things[0]._get_jwt_settings)
 
-
     # pd.projects[0].things[0].set_jwt_settings(key='123', audience='audience', issuer='issuer', description='description', api=connection)
     # print(pd.projects[0].things[0]._set_jwt_settings)
 
@@ -120,47 +117,32 @@ if __name__=="__main__":
     pd.projects[0].things[0].get_lorawan_abp(api=connection)
     print(pd.projects[0].things[0]._get_lorawan_abp)
 
-    # pd.projects[0].things[0].set_lora(is_enable=True, is_otaa=True, dev_EUI='dev_EUI', appSKey='appSKey', nwkSKey='nwkSKey', dev_addr='dev_addr', app_key='12', app_EUI='4', description='description', api=connection)
-    # print(pd.projects[0].things[0]._set_lora)
+    pd.projects[0].things[0].get_lorawan_enable(api=connection)
+    print(pd.projects[0].things[0]._get_lorawan_enable)
 
-    # pd.projects[0].things[0].set_info(api=connection, name="name", description="des")
-    # print(pd.projects[0].things[0]._set_info)
-    #
-    # pd.projects[0].things[0].get_location(api=connection)
-    # print(pd.projects[0].things[0]._get_location)
+    pd.projects[0].things[0].set_lorawan_enable(enable=True, api=connection)
+    print(pd.projects[0].things[0]._set_lorawan_enable)
 
-    # pd.projects[0].things[0].set_location(latitude=12, longitude=20, api=connection)
-    # print(pd.projects[0].things[0]._set_location)
-    #
-    # pd.projects[0].things[0].get_program(api=connection)
-    # print(pd.projects[0].things[0]._get_program)
-    #
-    # pd.projects[0].things[0].set_program(program_id="000000000000000000000000", api=connection)
-    # print(pd.projects[0].things[0]._set_program)
+    pd.projects[0].things[0].get_lorawan_otaa(api=connection)
+    print(pd.projects[0].things[0]._get_lorawan_otaa)
 
-    # pd.projects[0].make_new_script(name='name', description='description', script='script', api=connection)
-    # print(pd.projects[0]._make_new_script)
+    pd.projects[0].things[0].set_lorawan_otaa(app_key='app_key', app_EUI='app_EUI', api=connection)
+    print(pd.projects[0].things[0]._set_lorawan_otaa)
 
-    # pd.projects[0].script_validation(param="param", code='code', api=connection)
-    # print(pd.projects[0]._script_validation)
+    pd.projects[0].things[0].get_lorawan_abp(api=connection)
+    print(pd.projects[0].things[0]._get_lorawan_abp)
 
-    # pd.projects[0].captcha_generate_deletation(api=connection)
-    # print(pd.projects[0]._captcha_generate_deletation)
+    pd.projects[0].things[0].set_lora_abp(app_skey='app_skey', nwk_skey='nwk_skey', dev_addr='dev_addr', api=connection)
+    print(pd.projects[0].things[0]._set_lora_abp)
 
-    # pd.projects[0].captcha_generate_modification(api=connection)
-    # print(pd.projects[0]._captcha_generate_modification)
+    pd.projects[0].things[0].get_lorawan_deveui(api=connection)
+    print(pd.projects[0].things[0]._get_lorawan_deveui)
 
-    # print(pd.projects[0].things[0].sensors[0].sensor_obj)
+    pd.projects[0].things[0].set_lorawan_deveui(dev_EUI='dev_EUI', api=connection)
+    print(pd.projects[0].things[0]._set_lorawan_deveui)
 
-    # print(pd.projects[0].things[0].sensors)
-    # print(pd.projects[0].things[0].sensors)
-    # print(pd.projects[0].things[0].sensors[0].sensor_obj)
+    pd.projects[0].things[0].get_lorawan_mode(api=connection)
+    print(pd.projects[0].things[0]._get_lorawan_mode)
 
-    # pd.projects[0].get_permission(connection)
-    # print(pd.projects[0].permission)
-
-    # pd.projects[0].delete_project(connection)
-    # print(pd.projects[0]._delete)
-
-    # pd.projects[0].things[0].delete_thing(connection)
-    # print(pd.projects[0].things[0].delete_thing_state)
+    pd.projects[0].things[0].set_lorawan_mode(mode='mode', api=connection)
+    print(pd.projects[0].things[0]._set_lorawan_mode)

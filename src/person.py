@@ -1,7 +1,7 @@
 from api import Api
 from project import Project
 
-class Person(object):
+class Person():
 
     def __init__(self, username, password):
         self.projects=[]

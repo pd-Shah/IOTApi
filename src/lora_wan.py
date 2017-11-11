@@ -17,7 +17,7 @@ class LoRaWAN():
     def get_lorawan_enable(self, api, endpoint='interface/lorawan/{0}/enable'):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={'thingId':self.thing_obj["id"], }
-        self._get_lorawan_enable=api._api_request(endpoint, headers=api.headers, data= data, verb=verb)
+        self._get_lorawan_enable=api._api_request(endpoint, headers=api.headers, data= data)
         return self._get_lorawan_enable
 
     def set_lorawan_enable(self, enable, api, endpoint="interface/lorawan/{0}/enable", verb='put'):
@@ -32,9 +32,9 @@ class LoRaWAN():
         self._get_lorawan_otaa=api._api_request(endpoint, headers=api.headers, data=data)
         return self._get_lorawan_otaa
 
-    def set_lorawan_otaa(self, app_key, app_EUI, dev_EUI, api, endpoint="interface/lorawan/{0}/otaa", verb="put"):
+    def set_lorawan_otaa(self, app_key, app_EUI, api, endpoint="interface/lorawan/{0}/otaa", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
-        data={"thingId":self.thing_obj["id"], "appkey":app_key, "appEUI":app_EUI, "devEUI":dev_EUI}
+        data={"thingId":self.thing_obj["id"], "appkey":app_key, "appEUI":app_EUI, }
         self._set_lorawan_otaa=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self._set_lorawan_otaa
 
@@ -56,7 +56,7 @@ class LoRaWAN():
         self._get_lorawan_deveui=api._api_request(endpoint, headers=api.headers, data=data)
         return self._get_lorawan_deveui
 
-    def set_lorawan_deveui(self, api, dev_EUI, endpoint='interface/lorawan/{0}/deveui', verb='put'):
+    def set_lorawan_deveui(self, dev_EUI, api, endpoint='interface/lorawan/{0}/deveui', verb='put'):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={"thingId":self.thing_obj["id"], 'devEUI':dev_EUI, }
         self._set_lorawan_deveui=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
