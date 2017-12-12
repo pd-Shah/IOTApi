@@ -13,6 +13,16 @@ class Data():
         self._get_sensor=api._api_request(endpoint, headers=api.headers, data=data)
         return self._get_sensor
 
+    def get_commands(self, api, endpoint='data/{0}/commands'):
+        endpoint=endpoint.format(self.thing_obj["id"])
+        self._get_commands= api._api_request(endpoint, headers=api.headers)
+        return self._get_commands
+
+    def execute_command(self, api, endpoint='data/{0}/execute'):
+        endpoint= endpoint.format(self.thing_obj["id"])
+        self._execute_command= api._api_request(endpoint, headers=api.headers)
+        return self._execute_command
+
     # def make_anonymous_raw(self, base64, api, endpoint="data/anonymous/raw", verb="post"):
     #     data={"base64":base64}
     #     self.anonymous_raw_state=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)

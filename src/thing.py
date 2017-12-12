@@ -44,18 +44,18 @@ class Thing(ThingCaptcha, Data, JWT, LoRaWAN):
         self._set_program=api._api_request(endpoint, headers=api.headers, verb=verb, data=data)
         return self._set_program
 
-    #
+
     # def delete_thing(self, api, endpoint="thing/{0}", verb="delete"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     self.delete_thing_state= api._api_request(endpoint, headers=api.headers, verb=verb)
     #     return self.delete_thing_state
-    #
+
     # def get_raw_data(self, page_number, page_size, api, endpoint="thing/{0}/data/raw"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     data={"pageNumber": page_number,"thingId":endpoint.format(self.thing_obj['result']["id"]), "pageSize": page_size}
     #     self.raw_data=api._api_request(endpoint, headers=api.headers, data=data)
     #     return self.raw_data_state
-    #
+
     # def get_thing_interfaces(self, api, endpoint="thing/{0}/interfaces"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     data={"thingId":endpoint.format(self.thing_obj['result']["id"])}
@@ -67,12 +67,12 @@ class Thing(ThingCaptcha, Data, JWT, LoRaWAN):
     #     data={"thingId": self.thing_obj['result']["id"] ,"type":_type, "pageNumber":page_number, "pageSize":page_size}
     #     self.data_sensor_by_type_state= api._api_request(endpoint, headers=api.headers, data=data)
     #     return self.data_sensor_by_type_state
-    #
+
     # def get_script(self, api, endpoint="thing/{0}/script"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     self.script_state= api._api_request(endpoint, headers=api.headers)
     #     return self.script_state
-    #
+    
     # def update_scrip(self, script, api, endpoint="thing/{0}/script"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     data={"thingId":self.thing_obj['result']["id"], "script":script,}

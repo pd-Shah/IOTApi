@@ -65,6 +65,9 @@ if __name__=="__main__":
     pd.projects[0].set_rule_interval(value=False, api=connection)
     print(pd.projects[0]._set_rule_interval)
 
+    pd.projects[0].get_programs(page_number=1, page_size=10, api=connection)
+    print(pd.projects[0]._get_programs)
+
     # pd.projects[0].make_new_thing(thing_name="thing", description="desc", api=connection)
     pd.projects[0].get_things(page_number=1, page_size=10, api=connection)
     print(pd.projects[0].things)
@@ -111,8 +114,8 @@ if __name__=="__main__":
     # pd.projects[0].things[0].get_jwt_generate(seconds=259200, api=connection)
     # print(pd.projects[0].things[0]._get_jwt_generate)
 
-    pd.projects[0].things[0].get_lora(api=connection)
-    print(pd.projects[0].things[0]._get_lora)
+    pd.projects[0].things[0].get_lorawan(api=connection)
+    print(pd.projects[0].things[0]._get_lorawan)
 
     pd.projects[0].things[0].get_lorawan_abp(api=connection)
     print(pd.projects[0].things[0]._get_lorawan_abp)
@@ -146,3 +149,6 @@ if __name__=="__main__":
 
     pd.projects[0].things[0].set_lorawan_mode(mode='mode', api=connection)
     print(pd.projects[0].things[0]._set_lorawan_mode)
+
+    # pd.projects[0].things[0].set_lorawan(is_enable=True, is_otaa=True, dev_EUI='dev_EUI', appSKey='appSKey', nwkSKey='nwkSKey', dev_addr='dev_addr', app_key='app_key', app_EUI='app_EUI', description='description', api=connection)
+    # print(pd.projects[0].things[0]._set_lorawan)

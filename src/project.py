@@ -26,38 +26,6 @@ class Project(ProjectCaptcha, Script):
         self.things.extend([Thing(thing) for thing in  api._api_request(endpoint, headers=api.headers, data=data)["result"]])
         return self.things
 
-    # def delete(self, api, endpoint="project/{0}", verb="delete"):
-    #     endpoint=endpoint.format(self.project_obj["id"])
-    #     self._delete=api._api_request(endpoint, headers=api.headers, verb=verb)
-    #     return self._delete
-
-    # def update_project(self, new_name, new_description, api, endpoint="project/{0}", verb="put"):
-    #     endpoint=endpoint.format(self.project_obj["id"])
-    #     data={"name": new_name, "description":new_description}
-    #     self.project_update_state=api._api_request(endpoint, headers=api.headers, verb=verb, data=data)
-    #     return self.project_update_state
-
-    # def get_permission(self, api, endpoint="project/{0}/permission"):
-    #     endpoint=endpoint.format(self.project_obj["id"])
-    #     self._get_permission= api._api_request(endpoint, headers=api.headers)
-    #     return self._get_permission
-
-    # def delete_permission(self, api, endpoint="project/{0}/permission", verb="delete"):
-    #     endpoint=endpoint.format(self.project_obj["id"])
-    #     self.delete_permission_state=api._api_request(endpoint, headers=api.headers, verb=verb)
-    #     return self.delete_permission_state
-
-    # def update_permission(self, api, endpoint="project/{0}/permission", verb="put"):
-    #     endpoint=endpoint.format(self.project_obj["id"])
-    #     self.update_permission_state=api._api_request(endpoint, headers=api.headers, verb=verb)
-    #     return self.delete_permission_state
-
-    # def get_users(self, page_number, page_size, api, endpoint="project/{0}/users"):
-    #     endpoint=endpoint.format(self.project_obj["id"])
-    #     data={"projectId": self.project_obj["id"], "pageNumber":page_number, "pageSize":page_size}
-    #     self._get_users=api._api_request(endpoint, headers=api.headers, data=data)
-    #     return self._get_users
-
     def make_new_thing(self, thing_name, description, api, endpoint="thing/new", verb="post"):
         data={"projectId": self.project_obj["id"], "name":thing_name, "description":description}
         self.things.append(Thing(api._api_request(endpoint, headers=api.headers, data=data, verb=verb)))
@@ -96,5 +64,43 @@ class Project(ProjectCaptcha, Script):
     def set_rule_script(self, value, api, endpoint="project/{0}/rule/script", verb="put"):
         endpoint=endpoint.format(self.project_obj["id"])
         data={"projectId": self.project_obj["id"], "value":value}
-        self._set_rule_script=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
+        self._set_rule_script= api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self._set_rule_script
+
+    def get_programs(self, page_number, page_size, api, endpoint='project/{0}/programs'):
+        endpoint=endpoint.format(self.project_obj["id"])
+        data={'projectId': self.project_obj["id"], 'pageNumber':page_number, 'pageSize':page_size, }
+        self._get_programs= api._api_request(endpoint, headers=api.headers, data=data)
+        return self._get_programs
+
+    # def delete(self, api, endpoint="project/{0}", verb="delete"):
+    #     endpoint=endpoint.format(self.project_obj["id"])
+    #     self._delete=api._api_request(endpoint, headers=api.headers, verb=verb)
+    #     return self._delete
+
+    # def update_project(self, new_name, new_description, api, endpoint="project/{0}", verb="put"):
+    #     endpoint=endpoint.format(self.project_obj["id"])
+    #     data={"name": new_name, "description":new_description}
+    #     self.project_update_state=api._api_request(endpoint, headers=api.headers, verb=verb, data=data)
+    #     return self.project_update_state
+
+    # def get_permission(self, api, endpoint="project/{0}/permission"):
+    #     endpoint=endpoint.format(self.project_obj["id"])
+    #     self._get_permission= api._api_request(endpoint, headers=api.headers)
+    #     return self._get_permission
+
+    # def delete_permission(self, api, endpoint="project/{0}/permission", verb="delete"):
+    #     endpoint=endpoint.format(self.project_obj["id"])
+    #     self.delete_permission_state=api._api_request(endpoint, headers=api.headers, verb=verb)
+    #     return self.delete_permission_state
+
+    # def update_permission(self, api, endpoint="project/{0}/permission", verb="put"):
+    #     endpoint=endpoint.format(self.project_obj["id"])
+    #     self.update_permission_state=api._api_request(endpoint, headers=api.headers, verb=verb)
+    #     return self.delete_permission_state
+
+    # def get_users(self, page_number, page_size, api, endpoint="project/{0}/users"):
+    #     endpoint=endpoint.format(self.project_obj["id"])
+    #     data={"projectId": self.project_obj["id"], "pageNumber":page_number, "pageSize":page_size}
+    #     self._get_users=api._api_request(endpoint, headers=api.headers, data=data)
+    #     return self._get_users

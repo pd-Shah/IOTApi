@@ -1,18 +1,22 @@
 class LoRaWAN():
 
-    def get_lora(self, api, endpoint="interface/lorawan/{0}"):
+    def get_lorawan(self, api, endpoint="interface/lorawan/{0}"):
         endpoint=endpoint.format(self.thing_obj["id"])
         data={'thingId':self.thing_obj["id"], }
-        self._get_lora=api._api_request(endpoint, headers=api.headers, data=data)
-        return self._get_lora
+        self._get_lorawan=api._api_request(endpoint, headers=api.headers, data=data)
+        return self._get_lorawan
 
-    def set_lora(self, is_enable, is_otaa, dev_EUI, appSKey, nwkSKey, dev_addr, app_key, app_EUI, description, api, endpoint="interface/lorawan/{0}", verb="put"):
+    def set_lorawan(self, is_enable, is_otaa, dev_EUI, appSKey, nwkSKey, dev_addr, app_key, app_EUI, description, api, endpoint="interface/lorawan/{0}", verb="put"):
         endpoint=endpoint.format(self.thing_obj["id"])
-        body={'isEnable':is_enable, 'isOtaa':is_otaa,
-        'devEUI':dev_EUI, 'abp':{'appSKey':appSKey, 'nwkSKey':nwkSKey, 'devAddr':dev_addr}, 'ota': {'appKey':app_key,
-        'appEUI':app_EUI}, 'description':description, }
-        self._set_lora=api._api_request(endpoint, headers=api.headers, body= body, verb=verb)
-        return self._set_lora
+        print(endpoint)
+        json={'isEnable': is_enable,
+        'isOtaa': is_otaa,
+        'devEUI': dev_EUI,
+        'abp': {'appSKey': appSKey, 'nwkSKey': nwkSKey, 'devAddr':dev_addr},
+        'ota': {'appKey':  app_key, 'appEUI': app_EUI},
+        'description': description }
+        self._set_lorawan= api._api_request(endpoint, headers=api.headers, json=json, verb=verb)
+        return self._set_lorawan
 
     def get_lorawan_enable(self, api, endpoint='interface/lorawan/{0}/enable'):
         endpoint=endpoint.format(self.thing_obj["id"])
