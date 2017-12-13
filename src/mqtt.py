@@ -1,5 +1,4 @@
 class MQTT():
-    pass
     # def check_mqtt(self, api, endpoint="interface/{0}/mqtt/enable"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     self.mqtt=api._api_request(endpoint, headers=api.headers)

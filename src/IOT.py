@@ -21,6 +21,7 @@ if __name__=="__main__":
     user.renew()
     print(user._renew)
 
+    #login
     pd=Person("pd", "123456")
     pd.api.login()
     print(pd.api.headers)
@@ -28,9 +29,10 @@ if __name__=="__main__":
     print(pd.api.host)
 
     connection=pd.api
+    print(connection)
 
     #make new project
-    #pd.make_new_project("new", "new")
+    pd.make_new_project("new", "new")
 
     #get all user projects
     pd.get_projects(page_size=10, page_number=1)
@@ -47,7 +49,7 @@ if __name__=="__main__":
 
     print(pd.projects[0].things)
     print(pd.projects[0].project_obj)
-    print(pd.projects[0].project_obj["id"])
+    print(pd.projects[0].project_obj['result']["id"])
 
     pd.projects[0].new_rule(is_enabled=True, interval=10, trigger=True, script="dsa", api=connection)
     pd.projects[0].get_rule(api=connection)
@@ -68,12 +70,12 @@ if __name__=="__main__":
     pd.projects[0].get_programs(page_number=1, page_size=10, api=connection)
     print(pd.projects[0]._get_programs)
 
-    # pd.projects[0].make_new_thing(thing_name="thing", description="desc", api=connection)
+    pd.projects[0].make_new_thing(thing_name="thing", description="desc", api=connection)
     pd.projects[0].get_things(page_number=1, page_size=10, api=connection)
     print(pd.projects[0].things)
     print(pd.projects[0].things[0])
     print(pd.projects[0].things[0].thing_obj)
-    print(pd.projects[0].things[0].thing_obj['id'])
+    print(pd.projects[0].things[0].thing_obj['result']['id'])
 
     pd.projects[0].things[0].get_info(api=connection)
     print(pd.projects[0].things[0]._get_info)
@@ -150,5 +152,26 @@ if __name__=="__main__":
     pd.projects[0].things[0].set_lorawan_mode(mode='mode', api=connection)
     print(pd.projects[0].things[0]._set_lorawan_mode)
 
-    # pd.projects[0].things[0].set_lorawan(is_enable=True, is_otaa=True, dev_EUI='dev_EUI', appSKey='appSKey', nwkSKey='nwkSKey', dev_addr='dev_addr', app_key='app_key', app_EUI='app_EUI', description='description', api=connection)
-    # print(pd.projects[0].things[0]._set_lorawan)
+    pd.projects[0].things[0].set_lorawan(is_enable=True, is_otaa=True, dev_EUI='1', appSKey='1', nwkSKey='1', dev_addr='1', app_key='1', app_EUI='1', description='description', api=connection)
+    print(pd.projects[0].things[0]._set_lorawan)
+
+    pd.projects[0].things[0].get_commands(api=connection)
+    print(pd.projects[0].things[0]._get_commands)
+
+    pd.projects[0].things[0].execute_command(api=connection, command_id='479ecf5e-2ed5-4bab-9480-6a6148bc5cad')
+    print(pd.projects[0].things[0]._execute_command)
+
+    pd.projects[0].things[0].get_sensor(api=connection, type=3)
+    print(pd.projects[0].things[0]._get_sensor)
+
+    pd.projects[0].things[0].set_jwt_settings(key='123', audience='audience', issuer='issuer', description='description', api=connection)
+    print(pd.projects[0].things[0]._set_jwt_settings)
+
+    pd.projects[0].things[0].get_jwt_generate(seconds='10000', api=connection)
+    print(pd.projects[0].things[0]._get_jwt_generate)
+
+    from uplink import Uplink
+    import base64
+
+    token=pd.projects[0].things[0]._get_jwt_generate['result']['accessToken']
+    Uplink().post_anonymous_cbor(base64=base64.b64encode(b'your name'), api=connection, token=token)

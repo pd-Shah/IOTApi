@@ -12,11 +12,10 @@ class Api():
         self.password = password
         self.host = host
 
-    def _api_request(self, endpoint, verb='get', json=None, headers=None, data=None):
-        response = getattr(requests, verb)(self.host + endpoint, json=json, headers=headers, data= data)
+    def _api_request(self, endpoint, verb='get', json=None, headers=None, data=None, params=None):
+        response = getattr(requests, verb)(self.host + endpoint, json=json, headers=headers, data= data, params=params)
         print('{} {}'.format(response.status_code, response.reason))
         data = response.json()
-        print(data)
         if isinstance(data, dict):
             messages = data.pop("messages", None)
             if messages:

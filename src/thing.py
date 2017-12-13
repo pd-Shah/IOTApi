@@ -11,39 +11,37 @@ class Thing(ThingCaptcha, Data, JWT, LoRaWAN):
         self.sensors=[]
 
     def get_info(self, api, endpoint="thing/{0}/info"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"thingId":self.thing_obj["id"], }
-        self._get_info=api._api_request(endpoint, headers=api.headers, data=data)
+        endpoint=endpoint.format(self.thing_obj['result']["id"])
+        self._get_info=api._api_request(endpoint, headers=api.headers,)
         return self._get_info
 
     def set_info(self, name, description, api, endpoint="thing/{0}/info", verb="put"):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"thingId":self.thing_obj["id"], "name":name, "description":description, }
+        endpoint=endpoint.format(self.thing_obj['result']["id"])
+        data={"name":name, "description":description, }
         self._set_info=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self._set_info
 
     def get_location(self, api, endpoint="thing/{0}/location"):
-        endpoint=endpoint.format(self.thing_obj["id"])
+        endpoint=endpoint.format(self.thing_obj['result']["id"])
         self._get_location=api._api_request(endpoint, headers=api.headers, )
         return self._get_location
 
     def set_location(self, latitude, longitude, api, endpoint="thing/{0}/location", verb='put'):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={"latitude": latitude, "longitude":longitude, "thingId":self.thing_obj["id"], }
+        endpoint=endpoint.format(self.thing_obj['result']["id"])
+        data={"latitude": latitude, "longitude":longitude, }
         self._set_location=api._api_request(endpoint, headers=api.headers, data=data, verb=verb)
         return self._set_location
 
     def get_program(self, api, endpoint='thing/{0}/program'):
-        endpoint=endpoint.format(self.thing_obj["id"])
+        endpoint=endpoint.format(self.thing_obj['result']["id"])
         self._get_program=api._api_request(endpoint, headers=api.headers, )
         return self._get_program
 
     def set_program(self, program_id, api, endpoint='thing/{0}/program', verb='put'):
-        endpoint=endpoint.format(self.thing_obj["id"])
-        data={'programId':program_id, 'thingId':self.thing_obj["id"]}
+        endpoint=endpoint.format(self.thing_obj['result']["id"])
+        data={'programId':program_id, }
         self._set_program=api._api_request(endpoint, headers=api.headers, verb=verb, data=data)
         return self._set_program
-
 
     # def delete_thing(self, api, endpoint="thing/{0}", verb="delete"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
@@ -72,7 +70,7 @@ class Thing(ThingCaptcha, Data, JWT, LoRaWAN):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     self.script_state= api._api_request(endpoint, headers=api.headers)
     #     return self.script_state
-    
+
     # def update_scrip(self, script, api, endpoint="thing/{0}/script"):
     #     endpoint=endpoint.format(self.thing_obj['result']["id"])
     #     data={"thingId":self.thing_obj['result']["id"], "script":script,}
