@@ -1,9 +1,8 @@
-from api import Api
-from mqtt import MQTT
-from permission import Permission
-from person import Person
-from project import Project
-from uplink import Uplink
+from src.api import Api
+from src.permission import Permission
+from src.person import Person
+from src.project import Project
+from src.uplink import Uplink
 
 if __name__=="__main__":
 
@@ -32,7 +31,7 @@ if __name__=="__main__":
     print(connection)
 
     #make new project
-    pd.make_new_project("new", "new")
+    pd.make_new_project(project_name='new', project_description='new')
 
     #get all user projects
     pd.get_projects(page_size=10, page_number=1)
@@ -49,7 +48,7 @@ if __name__=="__main__":
 
     print(pd.projects[0].things)
     print(pd.projects[0].project_obj)
-    print(pd.projects[0].project_obj['result']["id"])
+    print(pd.projects[0].project_obj["id"])
 
     pd.projects[0].new_rule(is_enabled=True, interval=10, trigger=True, script="dsa", api=connection)
     pd.projects[0].get_rule(api=connection)
@@ -67,15 +66,15 @@ if __name__=="__main__":
     pd.projects[0].set_rule_interval(value=False, api=connection)
     print(pd.projects[0]._set_rule_interval)
 
-    pd.projects[0].get_programs(page_number=1, page_size=10, api=connection)
+    pd.projects[0].get_programs(page_number=0, page_size=10, api=connection)
     print(pd.projects[0]._get_programs)
 
     pd.projects[0].make_new_thing(thing_name="thing", description="desc", api=connection)
-    pd.projects[0].get_things(page_number=1, page_size=10, api=connection)
+    pd.projects[0].get_things(page_number=0, page_size=10, api=connection)
     print(pd.projects[0].things)
     print(pd.projects[0].things[0])
     print(pd.projects[0].things[0].thing_obj)
-    print(pd.projects[0].things[0].thing_obj['result']['id'])
+    print(pd.projects[0].things[0].thing_obj['id'])
 
     pd.projects[0].things[0].get_info(api=connection)
     print(pd.projects[0].things[0]._get_info)
@@ -152,7 +151,7 @@ if __name__=="__main__":
     pd.projects[0].things[0].set_lorawan_mode(mode='mode', api=connection)
     print(pd.projects[0].things[0]._set_lorawan_mode)
 
-    pd.projects[0].things[0].set_lorawan(is_enable=True, is_otaa=True, dev_EUI='1', appSKey='1', nwkSKey='1', dev_addr='1', app_key='1', app_EUI='1', description='description', api=connection)
+    pd.projects[0].things[0].set_lorawan(is_enable=True, is_otaa=True, dev_EUI='0', appSKey='0', nwkSKey='0', dev_addr='0', app_key='0', app_EUI='0', description='description', api=connection)
     print(pd.projects[0].things[0]._set_lorawan)
 
     pd.projects[0].things[0].get_commands(api=connection)
@@ -169,9 +168,3 @@ if __name__=="__main__":
 
     pd.projects[0].things[0].get_jwt_generate(seconds='10000', api=connection)
     print(pd.projects[0].things[0]._get_jwt_generate)
-
-    from uplink import Uplink
-    import base64
-
-    token=pd.projects[0].things[0]._get_jwt_generate['result']['accessToken']
-    Uplink().post_anonymous_cbor(base64=base64.b64encode(b'your name'), api=connection, token=token)
