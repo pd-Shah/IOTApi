@@ -26,26 +26,35 @@ if __name__=="__main__":
             
         elif choice==2:
             print('\n[*]getting projects')
-            projects=pd.get_projects(page_size=10, page_number=1)
-            print("\n[+] projects are:", pd.projects)
+            projects=pd.get_projects(page_size=20, page_number=0)
+##            print("\n[+] projects are:", pd.projects)
+            for index, project in enumerate(projects):
+                print(index, ':', project.project_obj['name'])
 
             choice=input('Enter project number')
             choice=int(choice)
 
-            print('[+]selected project is', pd.projects[choice])
-            print('[+]selected project content is', pd.projects[choice].project_obj)
+##            print('[+]selected project is', pd.projects[choice])
+##             print('[+]selected project content is', pd.projects[choice].project_obj)
             x=input('Enter 1 for  add things\nEnter 2 for get things')
             x=int(x)
 
             if x==2:
-                print('things are:', pd.projects[choice].get_things(page_number=1, page_size=10, api=connection))
+                
+                things=pd.projects[choice].get_things(page_number=1, page_size=10, api=connection)
+                for index, thing in enumerate(things):
+                    print(index, ':', thing.thing_obj['name'])
 
-                z=input('Enter 1 for sensors')
+                thing_choice=int(input('Select thing: '))
+                
+
+                z=input('Enter 1 for sensors\nEnter 2 for add sensor')
                 z=int(z)
 
-                print('sensors are:', pd.projects[choice].things[x].get_sensors(connection))
-
-                
+                if z==1:
+                    sensors=pd.projects[choice].things[thing_choice].get_sensors(connection)
+                    for index, sensor in enumerate(sensors):
+                        print(index, ':', sensor.sensor_obj)
 
             elif x==1:
                 thing_name=input('Enter thing_name')

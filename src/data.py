@@ -1,3 +1,4 @@
+from .sensor import Sensor
 
 class Data():
 

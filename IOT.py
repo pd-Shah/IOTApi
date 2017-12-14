@@ -109,12 +109,6 @@ if __name__=="__main__":
     pd.projects[0].things[0].get_jwt_settings(api=connection)
     print(pd.projects[0].things[0]._get_jwt_settings)
 
-    # pd.projects[0].things[0].set_jwt_settings(key='123', audience='audience', issuer='issuer', description='description', api=connection)
-    # print(pd.projects[0].things[0]._set_jwt_settings)
-
-    # pd.projects[0].things[0].get_jwt_generate(seconds=259200, api=connection)
-    # print(pd.projects[0].things[0]._get_jwt_generate)
-
     pd.projects[0].things[0].get_lorawan(api=connection)
     print(pd.projects[0].things[0]._get_lorawan)
 
